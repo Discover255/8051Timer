@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02b
@@ -10,231 +10,246 @@ LOC  OBJ            LINE     SOURCE
 0000                   1                     ORG  0000H
 0000 020030            2                     LJMP MAIN
 000B                   3                     ORG  000BH
-000B 020164            4                     LJMP INT
+000B 020170            4                     LJMP INT
 0030                   5                     ORG  0030H
 0030 7800              6     MAIN:   MOV  R0,#0
 0032 7900              7                     MOV  R1,#0
-0034 7A00              8                     MOV  R2,#0
+0034 7A03              8                     MOV  R2,#3
 0036 7B00              9                     MOV  R3,#0
 0038 7C05             10                     MOV  R4,#5
 003A 7D01             11                     MOV  R5,#1
 003C 7E05             12                     MOV  R6,#5
 003E 7F00             13                     MOV  R7,#0
 0040 D2D4             14                     SETB RS1
-0042 7A04             15                     MOV  R2,#4
-0044 C2D4             16                     CLR  RS1
-0046 758901           17                     MOV  TMOD,#01H
-0049 758A01           18                     MOV  TL0,#1
-004C 758CF0           19                     MOV  TH0,#240
-004F D28C             20                     SETB TR0
-0051 D2A9             21                     SETB ET0
-0053 D2AF             22                     SETB EA
-                      23                     ;seraching here can be binary searching
-0055 020058           24                     LJMP IF0
-0058 BFFF06           25     IF0:    CJNE R7,#255,LOOP1
-005B 7F00             26                     MOV  R7,#0
-005D 312D             27                     CALL TIMEDEC
-005F B290             28                     CPL      P1.0
-0061 00               29     LOOP1:  NOP
-0062 B80004           30     IF2:    CJNE R0,#0,ELIF21
-0065 E9               31                     MOV  A,R1
-0066 020086           32                     LJMP BREAK1
-0069 B80104           33     ELIF21: CJNE R0,#1,ELIF22
-006C EA               34                     MOV  A,R2
-006D 020086           35                     LJMP BREAK1
-0070 B80204           36     ELIF22: CJNE R0,#2,ELIF23
-0073 EB               37                     MOV  A,R3
-0074 020086           38                     LJMP BREAK1
-0077 B80304           39     ELIF23: CJNE R0,#3,ELIF24
-007A EC               40                     MOV  A,R4
-007B 020086           41                     LJMP BREAK1
-007E B80404           42     ELIF24: CJNE R0,#4,ELSE2
-0081 ED               43                     MOV  A,R5
-0082 020086           44                     LJMP BREAK1
-0085 EE               45     ELSE2:  MOV  A,R6
-0086 9001ED           46     BREAK1: MOV  DPTR,#SEGTAB
-0089 93               47                     MOVC A,@A+DPTR
-008A D2A6             48                     SETB P2.6
-008C F580             49                     MOV  P0,A
-008E C2A6             50                     CLR  P2.6
-0090 9001F7           51                     MOV  DPTR,#SELECT
-0093 E8               52                     MOV  A,R0
-0094 93               53                     MOVC A,@A+DPTR
-0095 D2A7             54                     SETB P2.7
-0097 F580             55                     MOV  P0,A
-0099 C2A7             56                     CLR  P2.7
-009B 1201D7           57                     LCALL FLICK
-009E 200074           58                     JB   00H,IF15;sometimes flagbit read is wrong
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     2
+0042 B292             15                     CPL  P1.2
+0044 7B00             16                     MOV  R3,#0
+0046 C2D4             17                     CLR  RS1
+0048 758901           18                     MOV  TMOD,#01H
+004B 758A01           19                     MOV  TL0,#1
+004E 758CF0           20                     MOV  TH0,#240
+0051 D28C             21                     SETB TR0
+0053 D2A9             22                     SETB ET0
+0055 D2AF             23                     SETB EA
+                      24                     ;seraching here can be binary searching
+0057 02005A           25                     LJMP IF0
+005A BFFF06           26     IF0:    CJNE R7,#255,LOOP1
+005D 7F00             27                     MOV  R7,#0
+005F 3139             28                     CALL TIMEDEC
+0061 B290             29                     CPL      P1.0
+0063 00               30     LOOP1:  NOP
+0064 B80004           31     IF2:    CJNE R0,#0,ELIF21
+0067 E9               32                     MOV  A,R1
+0068 020088           33                     LJMP BREAK1
+006B B80104           34     ELIF21: CJNE R0,#1,ELIF22
+006E EA               35                     MOV  A,R2
+006F 020088           36                     LJMP BREAK1
+0072 B80204           37     ELIF22: CJNE R0,#2,ELIF23
+0075 EB               38                     MOV  A,R3
+0076 020088           39                     LJMP BREAK1
+0079 B80304           40     ELIF23: CJNE R0,#3,ELIF24
+007C EC               41                     MOV  A,R4
+007D 020088           42                     LJMP BREAK1
+0080 B80404           43     ELIF24: CJNE R0,#4,ELSE2
+0083 ED               44                     MOV  A,R5
+0084 020088           45                     LJMP BREAK1
+0087 EE               46     ELSE2:  MOV  A,R6
+0088 90020C           47     BREAK1: MOV  DPTR,#SEGTAB
+008B 93               48                     MOVC A,@A+DPTR
+008C D2A6             49                     SETB P2.6
+008E F580             50                     MOV  P0,A
+0090 C2A6             51                     CLR  P2.6
+0092 900216           52                     MOV  DPTR,#SELECT
+0095 E8               53                     MOV  A,R0
+0096 93               54                     MOVC A,@A+DPTR
+0097 D2A7             55                     SETB P2.7
+0099 F580             56                     MOV  P0,A
+009B C2A7             57                     CLR  P2.7
+009D 1201E3           58                     LCALL FLICK
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     2
 
-00A1 20B002           59                     JB   P3.0,BREAK16
-00A4 D201             60                     SETB 01H
-00A6 300105           61     BREAK16:JNB  01H,BREAK17
-00A9 30B002           62                     JNB  P3.0,BREAK17
-00AC D202             63                     SETB 02H
-00AE D2D4             64     BREAK17:SETB RS1
-00B0 BA0519           65                     CJNE R2,#5,ELSE18
-00B3 7A00             66                     MOV  R2,#0
-00B5 C201             67                     CLR  01H
-00B7 C202             68                     CLR  02H
-00B9 30B009           69                     JNB  P3.0,KEYUP01
-00BC C202             70                     CLR  02H
-00BE B293             71                     CPL  P1.3
-00C0 C2D4             72                     CLR  RS1
-00C2 0200E7           73                     LJMP BREAK18
-00C5 D202             74     KEYUP01:SETB 02H
-00C7 C2D4             75                     CLR  RS1
-00C9 0200E7           76                     LJMP BREAK18
-00CC 4019             77     ELSE18: JC   BREAK18
-00CE 7A00             78                     MOV  R2,#0
-00D0 C201             79                     CLR  01H
-00D2 C202             80                     CLR  02H
-00D4 30B009           81                     JNB  P3.0,KEYUP02
-00D7 C202             82                     CLR  02H
-00D9 B293             83                     CPL  P1.3
-00DB C2D4             84                     CLR  RS1
-00DD 0200E7           85                     LJMP BREAK18
-00E0 D202             86     KEYUP02:SETB 02H
-00E2 C2D4             87                     CLR  RS1
-00E4 0200E7           88                     LJMP BREAK18
-00E7 200202           89     BREAK18:JB   02H,BREAK19
-00EA C202             90                     CLR  02H
-00EC D2D4             91     BREAK19:SETB RS1
-00EE BA0005           92                     CJNE R2,#0,SWITCH1
-00F1 C2D4             93                     CLR  RS1
-00F3 020115           94                     LJMP IF15
-00F6 00               95     SWITCH1:NOP
-00F7 BA0107           96     CASE1:  CJNE R2,#1,CASE2
-00FA C2D4             97                     CLR  RS1
-00FC 1201B0           98                     LCALL SKIPH
-00FF 8014             99                     SJMP IF15
-0101 BA0207          100     CASE2:  CJNE R2,#2,CASE3
-0104 C2D4            101                     CLR  RS1
-0106 1201BD          102                     LCALL SKIPM
-0109 800A            103                     SJMP IF15
-010B BA0307          104     CASE3:  CJNE R2,#3,IF15
-010E C2D4            105                     CLR  RS1
-0110 1201CA          106                     LCALL SKIPS
-0113 8000            107                     SJMP IF15
-0115 D2D4            108     IF15:   SETB RS1
-0117 7401            109                     MOV  A,#1
-0119 B51003          110                     CJNE A,10H,IF9
-011C 020121          111                     LJMP RESET1
-011F 5007            112     IF9:    JNC  IF10
-0121 7800            113     RESET1: MOV  R0,#0
-0123 C2D4            114                     CLR  RS1
-0125 1201A1          115                     LCALL INDEX
-0128 C2D4            116     IF10:   CLR  RS1
-012A 020058          117                     LJMP IF0
-012D 00              118     TIMEDEC:NOP
-012E BE0026          119     IF3:    CJNE R6,#0,ELSE3
-0131 BD001F          120     IF4:    CJNE R5,#0,ELSE4
-0134 BC0018          121     IF5:    CJNE R4,#0,ELSE5
-0137 BB0011          122     IF6:    CJNE R3,#0,ELSE6
-013A BA000A          123     IF7:    CJNE R2,#0,ELSE7
-013D B90003          124     IF8:    CJNE R1,#0,ELSE8
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     3
+00A0 20005D           59                     JB   00H,IF15TRUNK;sometimes flagbit read is wrong
+00A3 20B002           60                     JB   P3.0,BREAK16
+00A6 D201             61                     SETB 01H
+00A8 300105           62     BREAK16:JNB  01H,BREAK17
+00AB 30B002           63                     JNB  P3.0,BREAK17
+00AE D202             64                     SETB 02H
+00B0 D2D4             65     BREAK17:SETB RS1
+00B2 BA051B           66                     CJNE R2,#5,ELSE18
+00B5 7A00             67                     MOV  R2,#0
+00B7 C201             68                     CLR  01H
+00B9 C202             69                     CLR  02H
+00BB 30B00B           70                     JNB  P3.0,KEYUP01
+00BE C202             71                     CLR  02H
+00C0 B293             72                     CPL  P1.3
+00C2 D203             73                     SETB 03H
+00C4 C2D4             74                     CLR  RS1
+00C6 0200ED           75                     LJMP BREAK18
+00C9 D202             76     KEYUP01:SETB 02H
+00CB C2D4             77                     CLR  RS1
+00CD 0200ED           78                     LJMP BREAK18
+00D0 401B             79     ELSE18: JC   BREAK18
+00D2 7A00             80                     MOV  R2,#0
+00D4 C201             81                     CLR  01H
+00D6 C202             82                     CLR  02H
+00D8 30B00B           83                     JNB  P3.0,KEYUP02
+00DB C202             84                     CLR  02H
+00DD B293             85                     CPL  P1.3
+00DF D203             86                     SETB 03H
+00E1 C2D4             87                     CLR  RS1
+00E3 0200ED           88                     LJMP BREAK18
+00E6 D202             89     KEYUP02:SETB 02H
+00E8 C2D4             90                     CLR  RS1
+00EA 0200ED           91                     LJMP BREAK18
+00ED 200202           92     BREAK18:JB   02H,BREAK19
+00F0 C202             93                     CLR  02H
+00F2 00               94     BREAK19:NOP
+00F3 300305           95     IF21:   JNB  03H,SWITCH1
+00F6 C203             96                     CLR  03H
+00F8 1201F9           97                     LCALL MOVSELECT
+00FB E513             98     SWITCH1:MOV  A,13H
+00FD B40003           99     CASE0:  CJNE A,#0,CASE1
+0100 020121          100     IF15TRUNK:LJMP IF15
+0103 BB0107          101     CASE1:  CJNE R3,#1,CASE2
+0106 C2D4            102                     CLR  RS1
+0108 1201BC          103                     LCALL SKIPH
+010B 8014            104                     SJMP IF15
+010D BB0207          105     CASE2:  CJNE R3,#2,CASE3
+0110 C2D4            106                     CLR  RS1
+0112 1201C9          107                     LCALL SKIPM
+0115 800A            108                     SJMP IF15
+0117 BB0307          109     CASE3:  CJNE R3,#3,IF15
+011A C2D4            110                     CLR  RS1
+011C 1201D6          111                     LCALL SKIPS
+011F 8000            112                     SJMP IF15
+0121 D2D4            113     IF15:   SETB RS1
+0123 7401            114                     MOV  A,#1
+0125 B51003          115                     CJNE A,10H,IF9
+0128 02012D          116                     LJMP RESET1
+012B 5007            117     IF9:    JNC  IF10
+012D 7800            118     RESET1: MOV  R0,#0
+012F C2D4            119                     CLR  RS1
+0131 1201AD          120                     LCALL INDEX
+0134 C2D4            121     IF10:   CLR  RS1
+0136 02005A          122                     LJMP IF0
+0139 00              123     TIMEDEC:NOP
+013A BE0026          124     IF3:    CJNE R6,#0,ELSE3
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     3
 
-0140 C2A3            125                     CLR  P2.3
-0142 22              126                     RET
-0143 19              127     ELSE8:  DEC      R1
-0144 020159          128                     LJMP BORROW2
-0147 1A              129     ELSE7:  DEC  R2
-0148 02015B          130                     LJMP BORROW3
-014B 1B              131     ELSE6:  DEC  R3
-014C 02015D          132                     LJMP BORROW4
-014F 1C              133     ELSE5:  DEC  R4
-0150 02015F          134                     LJMP BORROW5
-0153 1D              135     ELSE4:  DEC  R5
-0154 020161          136                     LJMP BORROW6
-0157 1E              137     ELSE3:  DEC  R6
-0158 22              138                     RET
-0159 7A09            139     BORROW2:MOV  R2,#9
-015B 7B05            140     BORROW3:MOV  R3,#5
-015D 7C09            141     BORROW4:MOV  R4,#9
-015F 7D05            142     BORROW5:MOV  R5,#5
-0161 7E09            143     BORROW6:MOV  R6,#9
-0163 22              144                     RET
-0164 00              145     INT:    NOP
-0165 758A01          146                     MOV  TL0,#1
-0168 758CF0          147                     MOV  TH0,#240
-016B 0F              148                     INC  R7
-016C 20D41D          149                     JB   RS1,KEEPRS1
-016F 30D30F          150                     JNB  RS0,KEEPRS01
-0172 D2D4            151                     SETB RS1
-0174 C2D3            152                     CLR  RS0
-0176 08              153                     INC  R0
-0177 09              154                     INC  R1
-0178 300201          155                     JNB  02H,QUITINT1
-017B 0A              156                     INC  R2
-017C C2D4            157     QUITINT1:CLR  RS1
-017E D2D3            158                     SETB RS0
-0180 32              159                     RETI
-0181 D2D4            160     KEEPRS01:       SETB RS1
-0183 08              161                             INC  R0
-0184 09              162                             INC  R1
-0185 300201          163                             JNB  02H,QUITINT2
-0188 0A              164                             INC  R2
-0189 C2D4            165     QUITINT2:       CLR  RS1
-018B 32              166                             RETI
-018C 30D30B          167     KEEPRS1:JNB RS0,KEEPRS02
-018F C2D3            168                     CLR  RS0
-0191 08              169                     INC  R0
-0192 09              170                     INC  R1
-0193 300202          171                     JNB  02H,QUITINT3
-0196 0A              172                     INC  R2
-0197 32              173                     RETI
-0198 D2D3            174     QUITINT3:SETB RS0
-019A 08              175     KEEPRS02:       INC  R0
-019B 09              176                             INC  R1
-019C 300201          177                             JNB  02H,QUITINT4
-019F 0A              178                             INC  R2
-01A0 32              179     QUITINT4:       RETI
-01A1 08              180     INDEX:  INC  R0
-01A2 7406            181                     MOV  A,#6
-01A4 B50004          182                     CJNE A,00H,CHECK1
-01A7 7800            183                     MOV  R0,#0
-01A9 8004            184                     SJMP RETURN1
-01AB 5002            185     CHECK1: JNC  RETURN1
-01AD 7800            186                     MOV  R0,#0
-01AF 22              187     RETURN1:RET
-01B0 B80003          188     SKIPH:  CJNE R0,#0,IF11
-01B3 1201A1          189                     LCALL INDEX
-01B6 B80103          190     IF11:   CJNE R0,#1,RETURN2
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     4
+013D BD001F          125     IF4:    CJNE R5,#0,ELSE4
+0140 BC0018          126     IF5:    CJNE R4,#0,ELSE5
+0143 BB0011          127     IF6:    CJNE R3,#0,ELSE6
+0146 BA000A          128     IF7:    CJNE R2,#0,ELSE7
+0149 B90003          129     IF8:    CJNE R1,#0,ELSE8
+014C C2A3            130                     CLR  P2.3
+014E 22              131                     RET
+014F 19              132     ELSE8:  DEC      R1
+0150 020165          133                     LJMP BORROW2
+0153 1A              134     ELSE7:  DEC  R2
+0154 020167          135                     LJMP BORROW3
+0157 1B              136     ELSE6:  DEC  R3
+0158 020169          137                     LJMP BORROW4
+015B 1C              138     ELSE5:  DEC  R4
+015C 02016B          139                     LJMP BORROW5
+015F 1D              140     ELSE4:  DEC  R5
+0160 02016D          141                     LJMP BORROW6
+0163 1E              142     ELSE3:  DEC  R6
+0164 22              143                     RET
+0165 7A09            144     BORROW2:MOV  R2,#9
+0167 7B05            145     BORROW3:MOV  R3,#5
+0169 7C09            146     BORROW4:MOV  R4,#9
+016B 7D05            147     BORROW5:MOV  R5,#5
+016D 7E09            148     BORROW6:MOV  R6,#9
+016F 22              149                     RET
+0170 00              150     INT:    NOP
+0171 758A01          151                     MOV  TL0,#1
+0174 758CF0          152                     MOV  TH0,#240
+0177 0F              153                     INC  R7
+0178 20D41D          154                     JB   RS1,KEEPRS1
+017B 30D30F          155                     JNB  RS0,KEEPRS01
+017E D2D4            156                     SETB RS1
+0180 C2D3            157                     CLR  RS0
+0182 08              158                     INC  R0
+0183 09              159                     INC  R1
+0184 300201          160                     JNB  02H,QUITINT1
+0187 0A              161                     INC  R2
+0188 C2D4            162     QUITINT1:CLR  RS1
+018A D2D3            163                     SETB RS0
+018C 32              164                     RETI
+018D D2D4            165     KEEPRS01:       SETB RS1
+018F 08              166                             INC  R0
+0190 09              167                             INC  R1
+0191 300201          168                             JNB  02H,QUITINT2
+0194 0A              169                             INC  R2
+0195 C2D4            170     QUITINT2:       CLR  RS1
+0197 32              171                             RETI
+0198 30D30B          172     KEEPRS1:JNB RS0,KEEPRS02
+019B C2D3            173                     CLR  RS0
+019D 08              174                     INC  R0
+019E 09              175                     INC  R1
+019F 300202          176                     JNB  02H,QUITINT3
+01A2 0A              177                     INC  R2
+01A3 32              178                     RETI
+01A4 D2D3            179     QUITINT3:SETB RS0
+01A6 08              180     KEEPRS02:       INC  R0
+01A7 09              181                             INC  R1
+01A8 300201          182                             JNB  02H,QUITINT4
+01AB 0A              183                             INC  R2
+01AC 32              184     QUITINT4:       RETI
+01AD 08              185     INDEX:  INC  R0
+01AE 7406            186                     MOV  A,#6
+01B0 B50004          187                     CJNE A,00H,CHECK1
+01B3 7800            188                     MOV  R0,#0
+01B5 8004            189                     SJMP RETURN1
+01B7 5002            190     CHECK1: JNC  RETURN1
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     4
 
-01B9 1201A1          191                     LCALL INDEX
-01BC 22              192     RETURN2:RET
-01BD B80203          193     SKIPM:  CJNE R0,#2,IF12
-01C0 1201A1          194                     LCALL INDEX
-01C3 B80303          195     IF12:   CJNE R0,#3,RETURN3
-01C6 1201A1          196                     LCALL INDEX
-01C9 22              197     RETURN3:RET
-01CA B80403          198     SKIPS:  CJNE R0,#4,IF13
-01CD 1201A1          199                     LCALL INDEX
-01D0 B80503          200     IF13:   CJNE R0,#5,RETURN4
-01D3 1201A1          201                     LCALL INDEX
-01D6 22              202     RETURN4:RET
-01D7 D2D4            203     FLICK:  SETB RS1
-01D9 7432            204                     MOV  A,#50
-01DB B51103          205                     CJNE A,11H,IF14
-01DE 8003            206                     SJMP RESET2
-01E0 22              207                     RET
-01E1 5007            208     IF14:   JNC  RETURN5
-01E3 00              209     RESET2: NOP
-01E4 B200            210                     CPL  00H
-01E6 7900            211                     MOV  R1,#0
-01E8 C2D4            212                     CLR  RS1
-01EA C2D4            213     RETURN5:CLR  RS1
-01EC 22              214                     RET
-                     215     ;in this way,I can't hide all dig
-01ED 3F065B4F        216     SEGTAB:          DB 3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
-01F1 666D7D07                
-01F5 7F6F                    
-01F7 FEFDFBF7        217     SELECT:          DB 11111110B,11111101B,11111011B,11110111B,11101111B,11011111B
-01FB EFDF                    
-                     218     END
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     5
+01B9 7800            191                     MOV  R0,#0
+01BB 22              192     RETURN1:RET
+01BC B80003          193     SKIPH:  CJNE R0,#0,IF11
+01BF 1201AD          194                     LCALL INDEX
+01C2 B80103          195     IF11:   CJNE R0,#1,RETURN2
+01C5 1201AD          196                     LCALL INDEX
+01C8 22              197     RETURN2:RET
+01C9 B80203          198     SKIPM:  CJNE R0,#2,IF12
+01CC 1201AD          199                     LCALL INDEX
+01CF B80303          200     IF12:   CJNE R0,#3,RETURN3
+01D2 1201AD          201                     LCALL INDEX
+01D5 22              202     RETURN3:RET
+01D6 B80403          203     SKIPS:  CJNE R0,#4,IF13
+01D9 1201AD          204                     LCALL INDEX
+01DC B80503          205     IF13:   CJNE R0,#5,RETURN4
+01DF 1201AD          206                     LCALL INDEX
+01E2 22              207     RETURN4:RET
+01E3 D2D4            208     FLICK:  SETB RS1
+01E5 7432            209                     MOV  A,#50
+01E7 B51103          210                     CJNE A,11H,IF14
+01EA 8003            211                     SJMP RESET2
+01EC 22              212                     RET
+01ED 5007            213     IF14:   JNC  RETURN5
+01EF 00              214     RESET2: NOP
+01F0 B200            215                     CPL  00H
+01F2 7900            216                     MOV  R1,#0
+01F4 C2D4            217                     CLR  RS1
+01F6 C2D4            218     RETURN5:CLR  RS1
+01F8 22              219                     RET
+01F9 E513            220     MOVSELECT:      MOV  A,13H
+01FB B40304          221     IF25:           CJNE A,#3,ELIF25_1
+01FE 751300          222                             MOV  13H,#0
+0201 22              223                             RET
+0202 5003            224     ELIF25_1:       JNC   ELIF25_2
+0204 0513            225                             INC  13H
+0206 22              226                             RET
+0207 751300          227     ELIF25_2:   MOV  13H,#0
+020A 22              228                             RET
+020B 22              229     RETURN6:        RET
+                     230     ;in this way,I can't hide all dig
+020C 3F065B4F        231     SEGTAB:          DB 3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
+0210 666D7D07                
+0214 7F6F                    
+0216 FEFDFBF7        232     SELECT:          DB 11111110B,11111101B,11111011B,11110111B,11101111B,11011111B
+021A EFDF                    
+                     233     END
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -242,86 +257,94 @@ SYMBOL TABLE LISTING
 
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
-BORROW2. . . . . .  C ADDR   0159H   A   
-BORROW3. . . . . .  C ADDR   015BH   A   
-BORROW4. . . . . .  C ADDR   015DH   A   
-BORROW5. . . . . .  C ADDR   015FH   A   
-BORROW6. . . . . .  C ADDR   0161H   A   
-BREAK1 . . . . . .  C ADDR   0086H   A   
-BREAK16. . . . . .  C ADDR   00A6H   A   
-BREAK17. . . . . .  C ADDR   00AEH   A   
-BREAK18. . . . . .  C ADDR   00E7H   A   
-BREAK19. . . . . .  C ADDR   00ECH   A   
-CASE1. . . . . . .  C ADDR   00F7H   A   
-CASE2. . . . . . .  C ADDR   0101H   A   
-CASE3. . . . . . .  C ADDR   010BH   A   
-CHECK1 . . . . . .  C ADDR   01ABH   A   
+BORROW2. . . . . .  C ADDR   0165H   A   
+BORROW3. . . . . .  C ADDR   0167H   A   
+BORROW4. . . . . .  C ADDR   0169H   A   
+BORROW5. . . . . .  C ADDR   016BH   A   
+BORROW6. . . . . .  C ADDR   016DH   A   
+BREAK1 . . . . . .  C ADDR   0088H   A   
+BREAK16. . . . . .  C ADDR   00A8H   A   
+BREAK17. . . . . .  C ADDR   00B0H   A   
+BREAK18. . . . . .  C ADDR   00EDH   A   
+BREAK19. . . . . .  C ADDR   00F2H   A   
+CASE0. . . . . . .  C ADDR   00FDH   A   
+CASE1. . . . . . .  C ADDR   0103H   A   
+CASE2. . . . . . .  C ADDR   010DH   A   
+CASE3. . . . . . .  C ADDR   0117H   A   
+CHECK1 . . . . . .  C ADDR   01B7H   A   
 EA . . . . . . . .  B ADDR   00A8H.7 A   
-ELIF21 . . . . . .  C ADDR   0069H   A   
-ELIF22 . . . . . .  C ADDR   0070H   A   
-ELIF23 . . . . . .  C ADDR   0077H   A   
-ELIF24 . . . . . .  C ADDR   007EH   A   
-ELSE18 . . . . . .  C ADDR   00CCH   A   
-ELSE2. . . . . . .  C ADDR   0085H   A   
-ELSE3. . . . . . .  C ADDR   0157H   A   
-ELSE4. . . . . . .  C ADDR   0153H   A   
-ELSE5. . . . . . .  C ADDR   014FH   A   
-ELSE6. . . . . . .  C ADDR   014BH   A   
-ELSE7. . . . . . .  C ADDR   0147H   A   
-ELSE8. . . . . . .  C ADDR   0143H   A   
+ELIF21 . . . . . .  C ADDR   006BH   A   
+ELIF22 . . . . . .  C ADDR   0072H   A   
+ELIF23 . . . . . .  C ADDR   0079H   A   
+ELIF24 . . . . . .  C ADDR   0080H   A   
+ELIF25_1 . . . . .  C ADDR   0202H   A   
+ELIF25_2 . . . . .  C ADDR   0207H   A   
+ELSE18 . . . . . .  C ADDR   00D0H   A   
+ELSE2. . . . . . .  C ADDR   0087H   A   
+ELSE3. . . . . . .  C ADDR   0163H   A   
+ELSE4. . . . . . .  C ADDR   015FH   A   
+ELSE5. . . . . . .  C ADDR   015BH   A   
+ELSE6. . . . . . .  C ADDR   0157H   A   
+ELSE7. . . . . . .  C ADDR   0153H   A   
+ELSE8. . . . . . .  C ADDR   014FH   A   
 ET0. . . . . . . .  B ADDR   00A8H.1 A   
-FLICK. . . . . . .  C ADDR   01D7H   A   
-IF0. . . . . . . .  C ADDR   0058H   A   
-IF10 . . . . . . .  C ADDR   0128H   A   
-IF11 . . . . . . .  C ADDR   01B6H   A   
-IF12 . . . . . . .  C ADDR   01C3H   A   
-IF13 . . . . . . .  C ADDR   01D0H   A   
-IF14 . . . . . . .  C ADDR   01E1H   A   
-IF15 . . . . . . .  C ADDR   0115H   A   
-IF2. . . . . . . .  C ADDR   0062H   A   
-IF3. . . . . . . .  C ADDR   012EH   A   
-IF4. . . . . . . .  C ADDR   0131H   A   
-IF5. . . . . . . .  C ADDR   0134H   A   
-IF6. . . . . . . .  C ADDR   0137H   A   
-IF7. . . . . . . .  C ADDR   013AH   A   
-IF8. . . . . . . .  C ADDR   013DH   A   
-IF9. . . . . . . .  C ADDR   011FH   A   
-INDEX. . . . . . .  C ADDR   01A1H   A   
-INT. . . . . . . .  C ADDR   0164H   A   
-KEEPRS01 . . . . .  C ADDR   0181H   A   
-KEEPRS02 . . . . .  C ADDR   019AH   A   
-KEEPRS1. . . . . .  C ADDR   018CH   A   
-KEYUP01. . . . . .  C ADDR   00C5H   A   
-KEYUP02. . . . . .  C ADDR   00E0H   A   
-LOOP1. . . . . . .  C ADDR   0061H   A   
+FLICK. . . . . . .  C ADDR   01E3H   A   
+IF0. . . . . . . .  C ADDR   005AH   A   
+IF10 . . . . . . .  C ADDR   0134H   A   
+IF11 . . . . . . .  C ADDR   01C2H   A   
+IF12 . . . . . . .  C ADDR   01CFH   A   
+IF13 . . . . . . .  C ADDR   01DCH   A   
+IF14 . . . . . . .  C ADDR   01EDH   A   
+IF15 . . . . . . .  C ADDR   0121H   A   
+IF15TRUNK. . . . .  C ADDR   0100H   A   
+IF2. . . . . . . .  C ADDR   0064H   A   
+IF21 . . . . . . .  C ADDR   00F3H   A   
+IF25 . . . . . . .  C ADDR   01FBH   A   
+IF3. . . . . . . .  C ADDR   013AH   A   
+IF4. . . . . . . .  C ADDR   013DH   A   
+IF5. . . . . . . .  C ADDR   0140H   A   
+IF6. . . . . . . .  C ADDR   0143H   A   
+IF7. . . . . . . .  C ADDR   0146H   A   
+IF8. . . . . . . .  C ADDR   0149H   A   
+IF9. . . . . . . .  C ADDR   012BH   A   
+INDEX. . . . . . .  C ADDR   01ADH   A   
+INT. . . . . . . .  C ADDR   0170H   A   
+KEEPRS01 . . . . .  C ADDR   018DH   A   
+KEEPRS02 . . . . .  C ADDR   01A6H   A   
+KEEPRS1. . . . . .  C ADDR   0198H   A   
+KEYUP01. . . . . .  C ADDR   00C9H   A   
+KEYUP02. . . . . .  C ADDR   00E6H   A   
+LOOP1. . . . . . .  C ADDR   0063H   A   
 MAIN . . . . . . .  C ADDR   0030H   A   
+MOVSELECT. . . . .  C ADDR   01F9H   A   
+A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 06:23:18 PAGE     6
+
 P0 . . . . . . . .  D ADDR   0080H   A   
 P1 . . . . . . . .  D ADDR   0090H   A   
 P2 . . . . . . . .  D ADDR   00A0H   A   
 P3 . . . . . . . .  D ADDR   00B0H   A   
-QUITINT1 . . . . .  C ADDR   017CH   A   
-QUITINT2 . . . . .  C ADDR   0189H   A   
-QUITINT3 . . . . .  C ADDR   0198H   A   
-A51 MACRO ASSEMBLER  MAIN                                                                 12/13/2017 02:03:28 PAGE     6
-
-QUITINT4 . . . . .  C ADDR   01A0H   A   
-RESET1 . . . . . .  C ADDR   0121H   A   
-RESET2 . . . . . .  C ADDR   01E3H   A   
-RETURN1. . . . . .  C ADDR   01AFH   A   
-RETURN2. . . . . .  C ADDR   01BCH   A   
-RETURN3. . . . . .  C ADDR   01C9H   A   
-RETURN4. . . . . .  C ADDR   01D6H   A   
-RETURN5. . . . . .  C ADDR   01EAH   A   
+QUITINT1 . . . . .  C ADDR   0188H   A   
+QUITINT2 . . . . .  C ADDR   0195H   A   
+QUITINT3 . . . . .  C ADDR   01A4H   A   
+QUITINT4 . . . . .  C ADDR   01ACH   A   
+RESET1 . . . . . .  C ADDR   012DH   A   
+RESET2 . . . . . .  C ADDR   01EFH   A   
+RETURN1. . . . . .  C ADDR   01BBH   A   
+RETURN2. . . . . .  C ADDR   01C8H   A   
+RETURN3. . . . . .  C ADDR   01D5H   A   
+RETURN4. . . . . .  C ADDR   01E2H   A   
+RETURN5. . . . . .  C ADDR   01F6H   A   
+RETURN6. . . . . .  C ADDR   020BH   A   
 RS0. . . . . . . .  B ADDR   00D0H.3 A   
 RS1. . . . . . . .  B ADDR   00D0H.4 A   
-SEGTAB . . . . . .  C ADDR   01EDH   A   
-SELECT . . . . . .  C ADDR   01F7H   A   
-SKIPH. . . . . . .  C ADDR   01B0H   A   
-SKIPM. . . . . . .  C ADDR   01BDH   A   
-SKIPS. . . . . . .  C ADDR   01CAH   A   
-SWITCH1. . . . . .  C ADDR   00F6H   A   
+SEGTAB . . . . . .  C ADDR   020CH   A   
+SELECT . . . . . .  C ADDR   0216H   A   
+SKIPH. . . . . . .  C ADDR   01BCH   A   
+SKIPM. . . . . . .  C ADDR   01C9H   A   
+SKIPS. . . . . . .  C ADDR   01D6H   A   
+SWITCH1. . . . . .  C ADDR   00FBH   A   
 TH0. . . . . . . .  D ADDR   008CH   A   
-TIMEDEC. . . . . .  C ADDR   012DH   A   
+TIMEDEC. . . . . .  C ADDR   0139H   A   
 TL0. . . . . . . .  D ADDR   008AH   A   
 TMOD . . . . . . .  D ADDR   0089H   A   
 TR0. . . . . . . .  B ADDR   0088H.4 A   
