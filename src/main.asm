@@ -56,46 +56,17 @@ BREAK1:	MOV  DPTR,#SEGTAB
 		MOV  P0,A
 		CLR  P2.7
 		LCALL FLICK
-		JB   00H,IF15TRUNK;sometimes flagbit read is wrong
-		JB   P3.0,BREAK16
-		SETB 01H
-BREAK16:JNB  01H,BREAK17
-		JNB  P3.0,BREAK17
-		SETB 02H
-BREAK17:SETB RS1
-		CJNE R2,#5,ELSE18
-		MOV  R2,#0
-		CLR  01H
-		CLR  02H
-		JNB  P3.0,KEYUP01
-		CLR  02H
-		CPL  P1.3
-		SETB 03H
-		CLR  RS1
-		LJMP BREAK18
-KEYUP01:SETB 02H
-		CLR  RS1
-		LJMP BREAK18
-ELSE18: JC   BREAK18
-		MOV  R2,#0
-		CLR  01H
-		CLR  02H
-		JNB  P3.0,KEYUP02
-		CLR  02H
-		CPL  P1.3
-		SETB 03H
-		CLR  RS1
-		LJMP BREAK18
-KEYUP02:SETB 02H
-		CLR  RS1
-		LJMP BREAK18
-BREAK18:JB   02H,BREAK19
-		CLR  02H
-BREAK19:NOP
-IF21:	JNB  03H,SWITCH1
+		JB   00H,IF15TRUNK;sometimes flagbit read is wrong,00H is a signal with a low freq for  flick
+		LCALL CHECKP30
+		LCALL CHECKP31
+IF43:	JNB  06H,IF21
+		CLR  06H
+		LCALL TIMEINC
+IF21:	JNB  03H,SWITCH1;the bit at 03H is the sign of key P3.0 up
 		CLR  03H
 		LCALL MOVSELECT
-SWITCH1:MOV  A,13H
+SWITCH1:SETB RS1
+		MOV  A,13H
 CASE0:	CJNE A,#0,CASE1
 IF15TRUNK:LJMP IF15
 CASE1:	CJNE R3,#1,CASE2
@@ -147,41 +118,24 @@ BORROW4:MOV  R4,#9
 BORROW5:MOV  R5,#5
 BORROW6:MOV  R6,#9
 		RET
+
+;========================================================================================
+
 INT:	NOP
 		MOV  TL0,#1
 		MOV  TH0,#240
-		INC  R7
-		JB   RS1,KEEPRS1
-		JNB  RS0,KEEPRS01
-		SETB RS1
-		CLR  RS0
-		INC  R0
-		INC  R1
-		JNB  02H,QUITINT1
-		INC  R2
-QUITINT1:CLR  RS1
-		SETB RS0
-		RETI
-KEEPRS01:	SETB RS1
-			INC  R0
-			INC  R1
-			JNB  02H,QUITINT2
-			INC  R2
-QUITINT2:	CLR  RS1
-			RETI
-KEEPRS1:JNB RS0,KEEPRS02
-		CLR  RS0
-		INC  R0
-		INC  R1
-		JNB  02H,QUITINT3
-		INC  R2
-		RETI
-QUITINT3:SETB RS0
-KEEPRS02:	INC  R0
-			INC  R1
-			JNB  02H,QUITINT4
-			INC  R2
-QUITINT4:	RETI
+		JNB  0DH,IF42
+		INC  07H;provide a clock for timer
+IF42:	INC  10H;increase group 3th R0,for update of view
+		INC  11H;increase group 3th R1,for flick of time
+IF30:	JNB  02H,IF31;check P3.0 keyup event
+		INC  12H;increase group 3th R2,for confirm the event of P3.0 keyup
+IF31:	JNB  05H,QUITINT;check P3.1 keyup event
+		INC  14H;increase group 3th R3,for confirm the event of P3.1 keyup
+QUITINT:RETI
+
+;===================================================================================================
+
 INDEX:  INC  R0
 		MOV  A,#6
 		CJNE A,00H,CHECK1
@@ -190,21 +144,33 @@ INDEX:  INC  R0
 CHECK1: JNC  RETURN1
 		MOV  R0,#0
 RETURN1:RET
+
+;-------------------------------------------------------------------------------------------
+
 SKIPH:  CJNE R0,#0,IF11
 		LCALL INDEX
 IF11:	CJNE R0,#1,RETURN2
 		LCALL INDEX
 RETURN2:RET
+
+;---------------------------------------------------------------------------------------------
+
 SKIPM:  CJNE R0,#2,IF12
 		LCALL INDEX
 IF12:	CJNE R0,#3,RETURN3
 		LCALL INDEX
 RETURN3:RET
+
+;---------------------------------------------------------------------------------------------
+
 SKIPS:  CJNE R0,#4,IF13
 		LCALL INDEX
 IF13:	CJNE R0,#5,RETURN4
 		LCALL INDEX
 RETURN4:RET
+
+;---------------------------------------------------------------------------------------------
+
 FLICK:  SETB RS1
 		MOV  A,#50
 		CJNE A,11H,IF14
@@ -217,6 +183,126 @@ RESET2: NOP
 		CLR  RS1
 RETURN5:CLR  RS1
 		RET
+
+;---------------------------------------------------------------------------------------------
+
+CHECKP30:	JB   P3.0,BREAK16
+			SETB 01H
+	BREAK16:JNB  01H,BREAK17
+			JNB  P3.0,BREAK17
+			SETB 02H
+	BREAK17:SETB RS1
+			CJNE R2,#5,ELSE18
+			MOV  R2,#0
+			CLR  01H
+			CLR  02H
+			JNB  P3.0,KEYUP01
+			CLR  02H
+			CPL  P1.3
+			SETB 03H
+			CLR  RS1
+			LJMP BREAK18
+	KEYUP01:SETB 02H
+			CLR  RS1
+			LJMP BREAK18
+	ELSE18: JC   BREAK18
+			MOV  R2,#0
+			CLR  01H
+			CLR  02H
+			JNB  P3.0,KEYUP02
+			CLR  02H
+			CPL  P1.3
+			SETB 03H
+			CLR  RS1
+			LJMP BREAK18
+	KEYUP02:SETB 02H
+			CLR  RS1
+			LJMP BREAK18
+	BREAK18:JB   02H,BREAK19
+			CLR  02H
+	BREAK19:NOP
+RETURN6:	RET
+
+;--------------------------------------------------------------------------------------------
+
+CHECKP31:	JB   P3.1,BREAK26
+			SETB 04H
+	BREAK26:JNB  04H,BREAK27
+			JNB  P3.0,BREAK27
+			SETB 05H
+	BREAK27:MOV  A,14H
+			CJNE A,#5,ELSE28
+			MOV  14H,#0
+			CLR  04H
+			CLR  05H
+			JNB  P3.1,KEYUP11
+			CLR  05H
+			CPL  P1.4
+			SETB 06H
+			LJMP BREAK28
+	KEYUP11:SETB 05H
+			LJMP BREAK28
+	ELSE28: JC   BREAK28
+			MOV  14H,#0
+			CLR  04H
+			CLR  05H
+			JNB  P3.1,KEYUP12
+			CLR  05H
+			CPL  P1.4
+			SETB 06H
+			LJMP BREAK28
+	KEYUP12:SETB 05H
+			LJMP BREAK28
+	BREAK28:JB   05H,RETURN7
+			CLR  05H
+RETURN7:	RET
+
+;---------------------------------------------------------------------------------------------
+
+TIMEINC:	MOV  A,13H
+			CLR  RS1
+IF35:		CJNE A,#1,ELIF35_1
+			LJMP INCH
+ELIF35_1:	CJNE A,#2,ELIF35_2
+			LJMP INCM
+ELIF35_2: 	CJNE A,#3,RETURN8
+			LJMP INCS
+RETURN8:	RET
+
+INCH:		NOP
+IF36:		CJNE R2,#9,ELSE36;addressing R2,R1 using name may cause wrong addressing (RS0 == 0,RS1 == 0)
+IF37:		CJNE R1,#9,ELSE37
+			MOV  R1,#0
+			MOV  R2,#0
+ELSE37:		INC  R1
+			MOV  R2,#0
+			RET
+ELSE36:		INC  R2
+			RET
+
+INCM:		NOP
+IF38:		CJNE R4,#9,ELSE38
+IF39:		CJNE R3,#5,ELSE39
+			MOV  R3,#0
+			MOV  R4,#0
+ELSE39:		INC  R3
+			MOV  R4,#0
+			RET
+ELSE38:		INC  R4
+			RET
+
+INCS:		NOP
+IF40:		CJNE R6,#9,ELSE40
+IF41:		CJNE R5,#5,ELSE41
+			MOV  R5,#0
+			MOV  R6,#0
+ELSE41:		INC  R5
+			MOV  R6,#0
+			RET
+ELSE40:		INC  R6
+			RET
+;---------------------------------------------------------------------------------------------
+
 MOVSELECT:	MOV  A,13H
 IF25:		CJNE A,#3,ELIF25_1
 			MOV  13H,#0
@@ -226,7 +312,7 @@ ELIF25_1:	JNC   ELIF25_2
 			RET
 ELIF25_2:   MOV  13H,#0
 			RET
-RETURN6:	RET
+;=====================================================================================================
 ;in this way,I can't hide all dig
 SEGTAB:		 DB 3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
 SELECT: 	 DB 11111110B,11111101B,11111011B,11110111B,11101111B,11011111B
