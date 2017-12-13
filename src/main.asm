@@ -5,14 +5,13 @@
 		ORG  0030H
 MAIN: 	MOV  R0,#0
 		MOV  R1,#0
-		MOV  R2,#3
+		MOV  R2,#0
 		MOV  R3,#0
-		MOV  R4,#5
+		MOV  R4,#0
 		MOV  R5,#1
 		MOV  R6,#5
 		MOV  R7,#0
 		SETB RS1
-		CPL  P1.2
 		MOV  R3,#0
 		CLR  RS1
 		MOV  TMOD,#01H
@@ -60,9 +59,14 @@ BREAK1:	MOV  DPTR,#SEGTAB
 		LCALL CHECKP30
 		LCALL CHECKP31
 		LCALL CHECKP32
-		JNB  09H,IF43
+		LCALL CHECKP33
+		JNB  0CH,IF52
+		CLR  0CH
+		CLR  0DH
+		SETB P2.3
+IF52:	JNB  09H,IF43
 		CLR  09H
-		LCALL MOVSELECT
+		SETB 0DH
 IF43:	JNB  06H,IF21
 		CLR  06H
 		LCALL TIMEINC
@@ -109,8 +113,10 @@ IF30:	JNB  02H,IF31;check P3.0 keyup event
 		INC  12H;increase group 3th R2,for confirm the event of P3.0 keyup
 IF31:	JNB  05H,IF47;check P3.1 keyup event
 		INC  14H;increase group 3th R4,for confirm the event of P3.1 keyup
-IF47:	JNB  08H,QUITINT;check P3.2 keyup event
-		INC  15H;increase group 3th R5,for confirm the event of P3.2 keyup
+IF47:	JNB  08H,IF53;check P3.2 keyup event
+		INC  15H;increase group 3th R5,for confirm the event of P3.2 keyup;increase group 3th R4,for confirm the event of P3.1 keyup
+IF53:	JNB  0BH,QUITINT;check P3.2 keyup event
+		INC  16H;increase group 3th R5,for confirm the event of P3.2 keyup
 QUITINT:RETI
 
 ;===================================================================================================
@@ -123,7 +129,7 @@ IF6:	CJNE R3,#0,ELSE6
 IF7:	CJNE R2,#0,ELSE7
 IF8:	CJNE R1,#0,ELSE8
 		CLR  P2.3
-		CLR  09H
+		CLR  0DH
 		RET
 ELSE8:	DEC	 R1
 		LJMP BORROW2
@@ -247,7 +253,6 @@ CHECKP31:	JB   P3.1,BREAK26
 			CLR  05H
 			JNB  P3.1,KEYUP11
 			CLR  05H
-			CPL  P1.4
 			SETB 06H
 			LJMP BREAK28
 	KEYUP11:SETB 05H
@@ -258,7 +263,6 @@ CHECKP31:	JB   P3.1,BREAK26
 			CLR  05H
 			JNB  P3.1,KEYUP12
 			CLR  05H
-			CPL  P1.4
 			SETB 06H
 			LJMP BREAK28
 	KEYUP12:SETB 05H
@@ -276,30 +280,60 @@ CHECKP32:	JB   P3.2,BREAK44
 			SETB 08H
 	BREAK45:MOV  A,15H
 			CJNE A,#5,ELSE46
-			MOV  14H,#0
+			MOV  15H,#0
 			CLR  07H
 			CLR  08H
 			JNB  P3.2,KEYUP21
 			CLR  08H
-			CPL  P1.5
-			SETB 06H
+			SETB 09H
 			LJMP BREAK46
 	KEYUP21:SETB 08H
 			LJMP BREAK46
 	ELSE46: JC   BREAK46
-			MOV  14H,#0
+			MOV  15H,#0
 			CLR  07H
 			CLR  08H
 			JNB  P3.2,KEYUP22
 			CLR  08H
-			CPL  P1.5
-			SETB 06H
+			SETB 09H
 			LJMP BREAK46
 	KEYUP22:SETB 08H
 			LJMP BREAK46
 	BREAK46:JB   08H,RETURN9
 			CLR  08H
 RETURN9:	RET
+
+;---------------------------------------------------------------------------------------------
+
+CHECKP33:	JB   P3.3,BREAK48
+			SETB 0AH
+	BREAK48:JNB  0AH,BREAK49
+			JNB  P3.3,BREAK49
+			SETB 0BH
+	BREAK49:MOV  A,16H
+			CJNE A,#5,ELSE50
+			MOV  16H,#0
+			CLR  0AH
+			CLR  0BH
+			JNB  P3.3,KEYUP31
+			CLR  0BH
+			SETB 0CH
+			LJMP BREAK51
+	KEYUP31:SETB 0BH
+			LJMP BREAK51
+	ELSE50: JC   BREAK51
+			MOV  16H,#0
+			CLR  0AH
+			CLR  0BH
+			JNB  P3.3,KEYUP32
+			CLR  0BH
+			SETB 0CH
+			LJMP BREAK51
+	KEYUP32:SETB 0BH
+			LJMP BREAK51
+	BREAK51:JB   0BH,RETURN10
+			CLR  0BH
+RETURN10:	RET
 
 ;---------------------------------------------------------------------------------------------
 
